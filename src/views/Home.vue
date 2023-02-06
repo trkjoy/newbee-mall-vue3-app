@@ -11,25 +11,12 @@
 <template>
   <div>
     <header class="home-header wrap" :class="{'active' : state.headerScroll}">
-      <router-link tag="i" to="./category"><i class="nbicon nbmenu2"></i></router-link>
-      <div class="header-search">
-        <span class="app-name">新蜂商城</span>
-        <i class="iconfont icon-search"></i>
-        <router-link tag="span" class="search-title" to="./product-list?from=home">山河无恙，人间皆安</router-link>
-      </div>
       <router-link class="login" tag="span" to="./login" v-if="!state.isLogin">登录</router-link>
       <router-link class="login" tag="span" to="./user" v-else>
         <van-icon name="manager-o" />
       </router-link>
     </header>
     <nav-bar />
-    <swiper :list="state.swiperList"></swiper>
-    <div class="category-list">
-      <div v-for="item in state.categoryList" v-bind:key="item.categoryId" @click="tips">
-        <img :src="item.imgUrl">
-        <span>{{item.name}}</span>
-      </div>
-    </div>
     <div class="good">
       <header class="good-header">新品上线</header>
       <van-skeleton title :row="3" :loading="state.loading">
@@ -78,7 +65,6 @@
 <script setup>
 import { reactive, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import swiper from '@/components/Swiper.vue'
 import navBar from '@/components/NavBar.vue'
 import { getHome } from '@/service/home'
 import { getLocal } from '@/common/js/utils'
@@ -93,49 +79,6 @@ const state = reactive({
   hots: [],
   newGoodses: [],
   recommends: [],
-  categoryList: [
-    {
-      name: '新蜂超市',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/%E8%B6%85%E5%B8%82%402x.png',
-      categoryId: 100001
-    }, {
-      name: '新蜂服饰',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/%E6%9C%8D%E9%A5%B0%402x.png',
-      categoryId: 100003
-    }, {
-      name: '全球购',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/%E5%85%A8%E7%90%83%E8%B4%AD%402x.png',
-      categoryId: 100002
-    }, {
-      name: '新蜂生鲜',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/%E7%94%9F%E9%B2%9C%402x.png',
-      categoryId: 100004
-    }, {
-      name: '新蜂到家',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/%E5%88%B0%E5%AE%B6%402x.png',
-      categoryId: 100005
-    }, {
-      name: '充值缴费',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/%E5%85%85%E5%80%BC%402x.png',
-      categoryId: 100006
-    }, {
-      name: '9.9元拼',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/9.9%402x.png',
-      categoryId: 100007
-    }, {
-      name: '领劵',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/%E9%A2%86%E5%88%B8%402x.png',
-      categoryId: 100008
-    }, {
-      name: '省钱',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/%E7%9C%81%E9%92%B1%402x.png',
-      categoryId: 100009
-    }, {
-      name: '全部',
-      imgUrl: 'https://s.yezgea02.com/1604041127880/%E5%85%A8%E9%83%A8%402x.png',
-      categoryId: 100010
-    }
-  ],
   loading: true
 })
 onMounted(async () => {
@@ -150,7 +93,6 @@ onMounted(async () => {
     forbidClick: true
   });
   const { data } = await getHome()
-  state.swiperList = data.carousels
   state.newGoodses = data.newGoodses
   state.hots = data.hotGoodses
   state.recommends = data.recommendGoodses

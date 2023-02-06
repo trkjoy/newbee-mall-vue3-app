@@ -15,10 +15,10 @@
         <i class="nbicon nblvsefenkaicankaoxianban-1"></i>
         <span>首页</span>
       </router-link>
-      <router-link  class="nav-list-item" to="category">
+      <!-- <router-link  class="nav-list-item" to="category">
         <i class="nbicon nbfenlei"></i>
         <span>分类</span>
-      </router-link>
+      </router-link> -->
       <router-link  class="nav-list-item" to="cart">
         <i><van-icon  name="shopping-cart-o" :badge="!cart.count ? '' : cart.count" /></i>
         <span>购物车</span>
