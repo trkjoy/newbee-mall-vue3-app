@@ -7,11 +7,12 @@
  * 版权所有，侵权必究！
  *
 -->
-
 <template>
-  <div id="app">
-    <RouterView />
-  </div>
+  <van-config-provider theme="light">    
+    <div id="app">
+      <RouterView />
+    </div>
+  </van-config-provider>
 </template>
 
 <script setup>
