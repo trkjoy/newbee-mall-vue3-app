@@ -17,8 +17,12 @@
   }
 }
 
+export function getUrlQueryKey(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
+}
+
 export const getLocal = (name) => {
-  return localStorage.getItem(name)
+  return "Bearer "+ localStorage.getItem(name)
 }
 
 export const setLocal = (name, value) => {

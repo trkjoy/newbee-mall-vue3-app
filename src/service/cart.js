@@ -18,7 +18,7 @@ export function modifyCart(params) {
 }
 
 export function getCart(params) {
-  return axios.get('/shop-cart', { params });
+  return axios.post('/api/get-shop-cart', params);
 }
 
 export function deleteCartItem(id) {

@@ -7,36 +7,44 @@
  * 版权所有，侵权必究！
  */
  import axios from 'axios'
- import { showToast, showFailToast } from 'vant'
- import { setLocal } from '@/common/js/utils'
+ import { showFailToast } from 'vant'
+ import { getLocal,setLocal } from '@/common/js/utils'
  import router from '../router'
 
- console.log('import.meta.env', import.meta.env)
- 
- axios.defaults.baseURL = import.meta.env.MODE == 'development' ? '//backend-api-01.newbee.ltd/api/v1' : '//backend-api-01.newbee.ltd/api/v1'
  axios.defaults.withCredentials = true
  axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
- axios.defaults.headers['token'] = localStorage.getItem('token') || ''
+ axios.defaults.headers['Postman-Token'] = 'XMLHttpRequest'
  axios.defaults.headers.post['Content-Type'] = 'application/json'
- 
- axios.interceptors.response.use(res => {
-   if (typeof res.data !== 'object') {
-    showFailToast('服务端异常！')
-     return Promise.reject(res)
-   }
-   if (res.data.resultCode != 200) {
-     if (res.data.message) showFailToast(res.data.message)
-     if (res.data.resultCode == 416) {
-       router.push({ path: '/login' })
-     }
-     if (res.data.data && window.location.hash == '#/login') {
-       setLocal('token', res.data.data)
-       axios.defaults.headers['token'] = res.data.data
-     }
-     return Promise.reject(res.data)
-   }
- 
-   return res.data
+    
+ axios.interceptors.request.use(function (config) {
+    config.headers.Authorization = getLocal('token') || ''
+    return config;
+  }, function (error) {
+    return Promise.reject(error);
+ });
+
+ axios.interceptors.response.use(function(response){
+  if (typeof response.data !== 'object') {
+    showFailToast('服务端异常!')
+    return Promise.reject(response)
+  }
+  const res = response.data
+  if (res.code != 200) {
+    if (res.msg){
+      showFailToast(res.msg)
+    } 
+    if (res.code == 401) {
+      router.push({ path: '/login' })
+    }
+    return Promise.reject(res)
+  }
+  if (window.location.hash == '#/login' && res.data.token) {
+    setLocal('token', res.data.token)
+    axios.defaults.headers['Authorization'] = getLocal('token') || ''
+  }
+  return res;
+ },function(error){
+    return Promise.reject(error);
  })
  
  export default axios

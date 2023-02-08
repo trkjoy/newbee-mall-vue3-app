@@ -9,7 +9,7 @@
 
 import axios from '../utils/axios'
 
-export function getHome() {
-  return axios.get('/index-infos');
+export function getHome(params) {
+  return axios.post('/api/index-infos',params);
 }
 

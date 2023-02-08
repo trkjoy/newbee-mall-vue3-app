@@ -67,7 +67,7 @@ import { reactive, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import navBar from '@/components/NavBar.vue'
 import { getHome } from '@/service/home'
-import { getLocal } from '@/common/js/utils'
+import { getLocal,setLocal,getUrlQueryKey } from '@/common/js/utils'
 import { showLoadingToast, closeToast, showToast } from 'vant'
 import { useCartStore } from '@/stores/cart'
 const cart = useCartStore()
@@ -82,7 +82,12 @@ const state = reactive({
   loading: true
 })
 onMounted(async () => {
-  const token = getLocal('token')
+  let token = getUrlQueryKey("token")
+  if(token){
+    setLocal('token',token)
+  }else{
+    token = getLocal('token')
+  }
   if (token) {
     state.isLogin = true
     // 获取购物车数据.

@@ -10,9 +10,17 @@
 
 <template>
   <div class="login">
-    <s-header :name="type == 'login' ? '登录' : '注册'" :back="'/home'"></s-header>
-    <img class="logo" src="https://s.yezgea02.com/1604045825972/newbee-mall-vue3-app-logo.png" alt="">
-    <div v-if="state.type == 'login'" class="login-body login">
+    <s-header :name="state.type == 'login' ? '登录' : '注册'" :back="'/home'"></s-header>
+    <img class="logo" src="../assets/photo.png" alt="">
+    <div v-if="state.env !='development'" class="login-body login">
+      <van-notice-bar
+        wrapable
+        :scrollable="true"
+        left-icon="info-o"
+        text="禁止访问,请从游戏中访问!!!(419)"
+      ></van-notice-bar>
+    </div>
+    <div v-else-if="state.type == 'login'" class="login-body login">
       <van-form @submit="onSubmit">
         <van-field
           v-model="state.username"
@@ -41,7 +49,7 @@
           </template>
         </van-field>
         <div style="margin: 16px;">
-          <div class="link-register" @click="toggle('register')">立即注册</div>
+          <!-- <div class="link-register" @click="toggle('register')">立即注册</div> -->
           <van-button round block color="#1baeae" native-type="submit">登录</van-button>
         </div>
       </van-form>
@@ -88,18 +96,17 @@ import { reactive, ref } from 'vue'
 import sHeader from '@/components/SimpleHeader.vue'
 import vueImgVerify from '@/components/VueImageVerify.vue'
 import { login, register } from '@/service/user'
-import { setLocal } from '@/common/js/utils'
-import md5 from 'js-md5'
 import { showSuccessToast, showFailToast } from 'vant'
 const verifyRef = ref(null)
 const state = reactive({
+  env: import.meta.env.MODE,
+  type: 'login',
+  imgCode: '',
+  verify: '',
   username: '',
   password: '',
   username1: '',
   password1: '',
-  type: 'login',
-  imgCode: '',
-  verify: ''
 })
 
 // 切换登录和注册两种模式
@@ -112,20 +119,19 @@ const toggle = (v) => {
 const onSubmit = async (values) => {
   state.imgCode = verifyRef.value.state.imgCode || ''
   if (state.verify.toLowerCase() != state.imgCode.toLowerCase()) {
-    showFailToast('验证码有误')
+    showFailToast('Verification code is wrong')
     return
   }
   if (state.type == 'login') {
     const { data } = await login({
-      "loginName": values.username,
-      "passwordMd5": md5(values.password)
+      "name": values.username,
+      "password": values.password
     })
-    setLocal('token', data)
-    // 需要刷新页面，否则 axios.js 文件里的 token 不会被重置
+    //需要刷新页面，否则 axios.js 文件里的 token 不会被重置
     window.location.href = '/'
   } else {
     await register({
-      "loginName": values.username1,
+      "name": values.username1,
       "password": values.password1
     })
     showSuccessToast('注册成功')

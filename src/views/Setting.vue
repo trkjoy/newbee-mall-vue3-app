@@ -27,11 +27,11 @@ import md5 from 'js-md5'
 import sHeader from '@/components/SimpleHeader.vue'
 import { getUserInfo, EditUserInfo, logout } from '@/service/user'
 import { setLocal } from '@/common/js/utils'
-import { showSuccessToast } from 'vant'
+import { showSuccessToast,showFailToast } from 'vant'
 const state = reactive({
   nickName: '',
-  introduceSign: '',
-  password: ''
+  password: '',
+  introduceSign: ''
 })
 
 onMounted(async () => {
@@ -46,17 +46,21 @@ const save = async () => {
     nickName: state.nickName
   }
   if (state.password) {
-    params.passwordMd5 = md5(state.password)
+    params.passwordMd5 = state.password
   } 
-  await EditUserInfo(params)
-  showSuccessToast('保存成功')
+  const { code,msg } = await EditUserInfo(params)
+  if(code == 200){
+    showSuccessToast(msg)
+  }else{
+    showFailToast(msg)
+  }
 }
 
 const handleLogout = async () => {
-  const { resultCode } = await logout()
-  if (resultCode == 200) {
+  const { code } = await logout()
+  if (code == 200) {
     setLocal('token', '')
-    window.location.href = '/home'
+    window.location.href = '/'
   }
 }
 </script>

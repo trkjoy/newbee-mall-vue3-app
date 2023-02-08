@@ -3,8 +3,7 @@ import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
-import { wrapperEnv } from './build/utils';
-import { OUTPUT_DIR } from './build/constant';
+import { wrapperEnv,createProxy } from './build/utils';
 import pkg from './package.json';
 import { format } from 'date-fns';
 const { dependencies, devDependencies, name, version } = pkg;
@@ -20,16 +19,10 @@ export default defineConfig(({ command, mode }) => {
     // 根据当前工作目录中的 `mode` 加载 .env 文件
   // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
   const root = process.cwd();
-  const env = loadEnv(mode, root, '');
+  const env = loadEnv(mode, root, 'VITE_');
     // 读取并处理所有环境变量配置文件 .env
   const viteEnv = wrapperEnv(env);
-  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY, VITE_GLOB_PROD_MOCK } =
-    viteEnv;
-
-  const prodMock = VITE_GLOB_PROD_MOCK;
-
-  const isBuild = command === 'build';
-
+  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY} = viteEnv;
   return {
     base: VITE_PUBLIC_PATH,
     root,
@@ -54,7 +47,6 @@ export default defineConfig(({ command, mode }) => {
       pure: VITE_DROP_CONSOLE ? ['console.log', 'debugger'] : [],
       // minify: true, // minify: true, 等于 minify: 'esbuild',
     },
-    
     build: {
       // 设置最终构建的浏览器兼容目标
       target: 'es2015',
@@ -63,7 +55,7 @@ export default defineConfig(({ command, mode }) => {
       sourcemap: false,
       cssTarget: 'chrome80',
       // 指定输出路径（相对于 项目根目录)
-      outDir: OUTPUT_DIR,
+      outDir: 'dist',
       // 只有 minify 为 terser 的时候, 本配置项才能起作用
       // terserOptions: {
       //   compress: {
@@ -80,8 +72,9 @@ export default defineConfig(({ command, mode }) => {
       chunkSizeWarningLimit: 2000,
     },
     server: {
-      // host: true,
-      port: env.VITE_PORT,
+      host: true,
+      port: VITE_PORT,
+      proxy: createProxy(VITE_PROXY,['/api','/upload'])
     },
   }
-})
+});
