@@ -25,6 +25,7 @@ export function logout() {
   return axios.get('/api/auth/logout')
 }
 
+
 export function register(params) {
   return axios.post('/api/auth/register', params);
 }
