@@ -14,7 +14,7 @@ export function getCart(params) {
 }
 
 export function addCart(params) {
-  return axios.post('/shop-cart', params);
+  return axios.post('/api/add-shop-cart', params);
 }
 
 export function modifyCart(params) {
