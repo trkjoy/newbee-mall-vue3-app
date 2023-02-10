@@ -71,7 +71,7 @@
 import { reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'
-import { showToast, showLoadingToast, closeToast, showFailToast } from 'vant'
+import { showLoadingToast, closeToast, showFailToast, showSuccessToast } from 'vant'
 import navBar from '@/components/NavBar.vue'
 import sHeader from '@/components/SimpleHeader.vue'
 import { getCart, deleteCartItem, modifyCart } from '@/service/cart'
@@ -91,7 +91,7 @@ onMounted(() => {
 })
 
 const init = async () => {
-  showLoadingToast({ message: '加载中...', forbidClick: true });
+  showLoadingToast({ message: 'Loading...', forbidClick: true });
   const { data } = await getCart({ pageNumber: 1 })
   state.list = data
   state.result = data.map(item => item.cartItemId)
@@ -107,21 +107,17 @@ const total = computed(() => {
   return sum
 })
 
-const goBack = () => {
-  router.go(-1)
-}
-
 const goTo = () => {
   router.push({ path: '/home' })
 }
 
 const onChange = async (value, detail) => {
   if (value > 5) {
-    showFailToast('超出单个商品的最大购买数量')
+    showFailToast('The biggest purchase quantity beyond a single commodity')
     return
   }
   if (value < 1) {
-    showFailToast('商品不得小于0')
+    showFailToast('Goods shall not be less than zero')
     return
   }
   /**
@@ -129,13 +125,24 @@ const onChange = async (value, detail) => {
    * 这边做一个拦截处理，如果点击的时候，购物车单项的 goodsCount 等于点击的计步器数字，
    * 那么就不再进行修改操作
   */
-  if (state.list.find(item => item.cartItemId == detail.name)?.goodsCount == value) return
-  showLoadingToast({ message: '修改中...', forbidClick: true });
-  const params = {
+  if (state.list.find(item => item.cartItemId == detail.name)?.goodsCount == value){
+    return
+  } 
+  
+  showLoadingToast({ 
+    message: 'changing ...', 
+    forbidClick: true 
+  });
+
+  const {code,msg} = await modifyCart({
     cartItemId: detail.name,
     goodsCount: value
+  })
+  if(code == 200){
+    showSuccessToast(msg)
+  }else{
+    showFailToast(msg)
   }
-  await modifyCart(params)
   /**
    * 修改完成后，没有请求购物车列表，是因为闪烁的问题，
    * 这边手动给操作的购物车商品修改数据
@@ -145,12 +152,11 @@ const onChange = async (value, detail) => {
       item.goodsCount = value
     }
   })
-  closeToast()
 }
 
 const onSubmit = async () => {
   if (state.result.length == 0) {
-    showFailToast('请选择商品进行结算')
+    showFailToast('Please select a settlement of goods')
     return
   }
   const params = JSON.stringify(state.result)

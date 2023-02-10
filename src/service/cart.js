@@ -10,22 +10,22 @@
 import axios from '../utils/axios'
 
 export function getCart(params) {
-  return axios.post('/api/get-shop-cart', params);
+  return axios.post('/api/get/shop-cart', params);
 }
 
 export function addCart(params) {
-  return axios.post('/api/add-shop-cart', params);
+  return axios.post('/api/add/shop-cart', params);
 }
 
 export function modifyCart(params) {
-  return axios.put('/shop-cart', params);
+  return axios.post('/api/update/shop-cart', params);
 }
 
 export function deleteCartItem(id) {
-  return axios.delete(`/shop-cart/${id}`);
+  return axios.post(`/api/delete/shop-cart/${id}`);
 }
 
 export function getByCartItemIds(params) {
-  return axios.get('/shop-cart/settle', { params });
+  return axios.post('/api/settle/shop-cart',params);
 }
 

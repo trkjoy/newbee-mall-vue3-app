@@ -10,8 +10,13 @@
 import axios from '../utils/axios'
 
 export function createOrder(params) {
-  return axios.post('/saveOrder', params);
+  return axios.post('/api/create/order', params);
 }
+
+export function payOrder(params) {
+  return axios.post('/api/pay/order',params)
+}
+
 
 export function getOrderList(params) {
   return axios.get('/order', { params });
@@ -29,9 +34,7 @@ export function confirmOrder(id) {
   return axios.put(`/order/${id}/finish`)
 }
 
-export function payOrder(params) {
-  return axios.get('/paySuccess', { params })
-}
+
 
 
 

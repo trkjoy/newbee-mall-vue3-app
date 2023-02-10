@@ -17,6 +17,7 @@
       </router-link>
     </header>
     <nav-bar />
+    <!-- <swiper :list="state.swiperList"></swiper> -->
     <div class="good">
       <header class="good-header">新品上线</header>
       <van-skeleton title :row="3" :loading="state.loading">
@@ -98,8 +99,9 @@ onMounted(async () => {
     forbidClick: true
   });
   const { data } = await getHome()
-  state.newGoodses = data.newGoodses
   state.hots = data.hotGoodses
+  // state.swiperList = data.carousels
+  state.newGoodses = data.newGoodses
   state.recommends = data.recommendGoodses
   state.loading = false
   closeToast()
@@ -116,9 +118,6 @@ const goToDetail = (item) => {
   router.push({ path: `/product/${item.goodsId}` })
 }
 
-const tips = () => {
-  showToast('敬请期待');
-}
 </script>
 
 <style lang="less" scoped >

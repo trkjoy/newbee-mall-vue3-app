@@ -65,7 +65,7 @@ import { getByCartItemIds } from '@/service/cart'
 import { getDefaultAddress, getAddressDetail } from '@/service/address'
 import { createOrder, payOrder } from '@/service/order'
 import { setLocal, getLocal } from '@/common/js/utils'
-import { showLoadingToast, closeToast, showSuccessToast } from 'vant'
+import { showLoadingToast, closeToast, showSuccessToast, showFailToast } from 'vant'
 import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
@@ -82,23 +82,30 @@ onMounted(() => {
 })
 
 const init = async () => {
-  showLoadingToast({ message: '加载中...', forbidClick: true });
+  showLoadingToast({ message: 'Loading...', forbidClick: true });
   const { addressId, cartItemIds } = route.query
   const _cartItemIds = cartItemIds ? JSON.parse(cartItemIds) : JSON.parse(getLocal('cartItemIds'))
+  
   setLocal('cartItemIds', JSON.stringify(_cartItemIds))
   const { data: list } = await getByCartItemIds({ cartItemIds: _cartItemIds.join(',') })
   const { data: address } = addressId ? await getAddressDetail(addressId) : await getDefaultAddress()
+  
   if (!address) {
     router.push({ path: '/address' })
     return
   }
   state.cartList = list
   state.address = address
+
   closeToast()
 }
 
 const goTo = () => {
-  router.push({ path: '/address', query: { cartItemIds: JSON.stringify(state.cartItemIds), from: 'create-order' }})
+  router.push({ path: '/address', query: { 
+      from: 'create-order',
+      cartItemIds: JSON.stringify(state.cartItemIds)
+    }
+  })
 }
 
 const deleteLocal = () => {
@@ -106,14 +113,18 @@ const deleteLocal = () => {
 }
 
 const handleCreateOrder = async () => {
-  const params = {
+  const { code,msg,data } = await createOrder({
     addressId: state.address.addressId,
     cartItemIds: state.cartList.map(item => item.cartItemId)
+  })
+  if(code == 200){
+    showSuccessToast(msg)
+    setLocal('cartItemIds', '')
+    state.orderNo = data.orderNo
+    state.showPay = true
+  }else{
+    showFailToast(msg)
   }
-  const { data } = await createOrder(params)
-  setLocal('cartItemIds', '')
-  state.orderNo = data
-  state.showPay = true
 }
 
 const close = () => {
@@ -121,11 +132,18 @@ const close = () => {
 }
 
 const handlePayOrder = async (type) => {
-  await payOrder({ orderNo: state.orderNo, payType: type })
-  showSuccessToast('支付成功')
-  setTimeout(() => {
-    router.push({ path: '/order' })
-  }, 2000)
+  const { code,msg} = await payOrder({ 
+    orderNo: state.orderNo, 
+    payType: type
+  })
+  if(code == 200){
+    showSuccessToast(msg)
+    setTimeout(() => {
+      router.push({ path: '/order' })
+    }, 1000)
+  }else{
+    showFailToast(msg)
+  }
 }
 
 const total = computed(() => {
