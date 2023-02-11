@@ -19,7 +19,7 @@ export function payOrder(params) {
 
 
 export function getOrderList(params) {
-  return axios.get('/order', { params });
+  return axios.post('/api/list/order',params);
 }
 
 export function getOrderDetail(id) {

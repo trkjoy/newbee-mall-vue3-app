@@ -61,17 +61,24 @@ const state = reactive({
   loading: false,
   finished: false,
   refreshing: false,
+  totalPage: 0,
   list: [],
   page: 1,
-  totalPage: 0
+  size: 5,
 })
 
 const loadData = async () => {
-  const { data, data: { list } } = await getOrderList({ pageNumber: state.page, status: state.status })
+  const { data, data: { list } } = await getOrderList({ 
+    pageNumber: state.page, 
+    pageSize: state.size, 
+    status: state.status 
+  })
   state.list = state.list.concat(list)
   state.totalPage = data.totalPage
   state.loading = false;
-  if (state.page >= data.totalPage) state.finished = true
+  if (state.page >= data.totalPage){
+    state.finished = true
+  }
 }
 
 const onChangeTab = ({ name }) => {
@@ -90,8 +97,6 @@ const goBack = () => {
 
 const onLoad = () => {
   if (!state.refreshing && state.page < state.totalPage) {
-    console.log(state.page)
-    console.log(state.totalPage)
     state.page = state.page + 1
   }
   if (state.refreshing) {
