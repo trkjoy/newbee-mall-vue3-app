@@ -8,7 +8,9 @@ import 'lib-flexible/flexible'
 
 import './assets/main.css'
 import './common/style/theme.css'
+import 'vant/es/dialog/style'
 import 'vant/es/toast/style'
+
 const app = createApp(App)
 
 app.use(createPinia())

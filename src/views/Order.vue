@@ -14,10 +14,10 @@
     <van-tabs @click-tab="onChangeTab" :color="'#1baeae'" :title-active-color="'#1baeae'" class="order-tab" v-model="state.status">
       <van-tab title="全部" name=''></van-tab>
       <van-tab title="待付款" name="0"></van-tab>
-      <van-tab title="待确认" name="1"></van-tab>
-      <van-tab title="待发货" name="2"></van-tab>
+      <van-tab title="待发货" name="1,2"></van-tab>
       <van-tab title="已发货" name="3"></van-tab>
       <van-tab title="交易完成" name="4"></van-tab>
+      <van-tab title="交易关闭" name="-1,-2,-3,-4"></van-tab>
     </van-tabs>
     <div class="content">
       <van-pull-refresh v-model="state.refreshing" @refresh="onRefresh" class="order-list-refresh">
@@ -29,12 +29,16 @@
           @offset="10"
         >
           <div v-for="(item, index) in state.list" :key="index" class="order-item-box" @click="goTo(item.orderNo)">
+            <van-divider/>
             <div class="order-item-header">
               <span>订单时间：{{ item.createTime }}</span>
+            </div>
+            <div class="order-item-header">
+              <span>订单编号：{{ item.orderNo }}</span>
               <span>{{ item.orderStatusString }}</span>
             </div>
             <van-card
-              v-for="one in item.newBeeMallOrderItemVOS"
+              v-for="one in item.orderItems"
               :key="one.orderId"
               :num="one.goodsCount"
               :price="one.sellingPrice"

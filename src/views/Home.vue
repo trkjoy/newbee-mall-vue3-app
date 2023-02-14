@@ -69,10 +69,10 @@ import { useRouter } from 'vue-router'
 import navBar from '@/components/NavBar.vue'
 import { getHome } from '@/service/home'
 import { getLocal,setLocal,getUrlQueryKey } from '@/common/js/utils'
-import { showLoadingToast, closeToast, showToast } from 'vant'
+import { showLoadingToast, closeToast} from 'vant'
 import { useCartStore } from '@/stores/cart'
-const cart = useCartStore()
 const router = useRouter()
+const cart = useCartStore()
 const state = reactive({
   swiperList: [], // 轮播图列表
   isLogin: false, // 是否已登录
@@ -86,16 +86,15 @@ onMounted(async () => {
   let token = getUrlQueryKey("token")
   if(token){
     setLocal('token',token)
-  }else{
-    token = getLocal('token')
   }
+  token = getLocal('token')
   if (token) {
     state.isLogin = true
     // 获取购物车数据.
     cart.updateCart()
   }
   showLoadingToast({
-    message: '加载中...',
+    message: 'Loading',
     forbidClick: true
   });
   const { data } = await getHome()
