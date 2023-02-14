@@ -55,7 +55,7 @@ export default defineConfig(({ command, mode }) => {
       sourcemap: false,
       cssTarget: 'chrome80',
       // 指定输出路径（相对于 项目根目录)
-      outDir: 'dist',
+      outDir: 'dist/'+mode,
       // 只有 minify 为 terser 的时候, 本配置项才能起作用
       // terserOptions: {
       //   compress: {
