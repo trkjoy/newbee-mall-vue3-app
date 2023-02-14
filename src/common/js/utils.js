@@ -4312,7 +4312,7 @@ export const prefix = (url) => {
   if (url && url.startsWith('http')) {
     return url
   } else {
-    url = `http://backend-api-01.newbee.ltd${url}`
+    url = `https://down.slots12345.com${url}`
     return url
   }
 }
