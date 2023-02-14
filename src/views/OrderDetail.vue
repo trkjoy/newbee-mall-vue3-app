@@ -55,8 +55,9 @@ import { reactive, toRefs, onMounted } from 'vue'
 import sHeader from '@/components/SimpleHeader.vue'
 import { getOrderDetail, cancelOrder, confirmOrder, payOrder } from '@/service/order'
 import { showConfirmDialog, showLoadingToast, closeToast, showSuccessToast, closeDialog } from 'vant'
-import { useRoute } from 'vue-router'
-const router = useRoute()
+import { useRoute,useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
 const state = reactive({
   detail: {},
 })
@@ -70,7 +71,7 @@ const init = async () => {
     message: 'Loading...',
     forbidClick: true
   });
-  const { id } = router.query
+  const { id } = route.query
   const { data } = await getOrderDetail(id)
   state.detail = data
   closeToast()
@@ -113,7 +114,7 @@ const handlePayOrder = async (id) => {
     payOrder({ orderNo: id}).then(res => {
       if (res.code == 200) {
         showSuccessToast(res.msg)
-        router.push({ path: '/list/order'})
+        router.push({ path: '/order' })
       }
     })
   }).catch(() => {

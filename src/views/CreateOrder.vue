@@ -121,7 +121,8 @@ const handleCreateOrder = async () => {
     showSuccessToast(msg)
     setLocal('cartItemIds', '')
     state.orderNo = data.orderNo
-    state.showPay = true
+    router.push({ path: '/order-detail', query: { id:data.orderNo } })
+    // state.showPay = true
   }else{
     showFailToast(msg)
   }
