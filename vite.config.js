@@ -74,7 +74,7 @@ export default defineConfig(({ command, mode }) => {
       // 压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能
       reportCompressedSize: true,
       // chunk 大小警告的限制（以 kbs 为单位）
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 20000,
     },
     server: {
       host: true,
