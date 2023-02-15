@@ -1,11 +1,12 @@
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
-import { wrapperEnv,createProxy } from './build/utils';
-import pkg from './package.json';
-import { format } from 'date-fns';
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig, loadEnv } from 'vite'
+import { wrapperEnv,createProxy } from './build/utils'
+import { format } from 'date-fns'
+import pkg from './package.json'
+
 const { dependencies, devDependencies, name, version } = pkg;
 const __APP_INFO__ = {
   // APP 后台管理信息
@@ -28,7 +29,11 @@ export default defineConfig(({ command, mode }) => {
     root,
     plugins: [
       vue(),
-      Components({ resolvers: [VantResolver()] })
+      Components({
+        resolvers: [
+          VantResolver()
+        ] 
+      })
     ],
     resolve: {
       alias: {

@@ -1,15 +1,23 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { NoticeBar,ConfigProvider,ActionBar, ActionBarIcon, ActionBarButton, Divider, Popup, Overlay, Loading, Dialog, ContactCard, Form, AddressEdit, AddressList, Field, CellGroup, Cell, SwipeCell, Icon, Stepper, Card, Checkbox, CheckboxGroup, Button, Swipe, SwipeItem, PullRefresh, List, Tab, Tabs, SubmitBar, Toast, Skeleton } from 'vant'
+import { NoticeBar,ConfigProvider,ActionBar, ActionBarIcon, 
+  ActionBarButton, Divider, Popup, Overlay, Loading, Dialog, 
+  ContactCard, Form, AddressEdit, AddressList, Field, CellGroup, 
+  Cell, SwipeCell, Icon, Stepper, Card, Checkbox, CheckboxGroup, 
+  Button, Swipe, SwipeItem, PullRefresh, List, Tab, Tabs, SubmitBar, 
+  Toast, Skeleton,Notify,ImagePreview} from 'vant'
 
 import App from './App.vue'
 import router from './router'
 import 'lib-flexible/flexible'
-
 import './assets/main.css'
 import './common/style/theme.css'
+import 'vant/lib/index.css'
 import 'vant/es/dialog/style'
 import 'vant/es/toast/style'
+import 'vant/es/notify/style'
+import 'vant/es/image-preview/style'
+
 
 const app = createApp(App)
 
@@ -48,7 +56,8 @@ app.use(NoticeBar)
   .use(Checkbox)
   .use(CheckboxGroup)
   .use(Skeleton)
-
+  .use(Notify)
+  .use(ImagePreview)
 // 全局过滤器
 app.config.globalProperties.$filters = {
   prefix(url) {
