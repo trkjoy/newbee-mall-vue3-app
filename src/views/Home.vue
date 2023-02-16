@@ -11,15 +11,15 @@
 <template>
   <div>
     <header class="home-header wrap" :class="{'active' : state.headerScroll}">
-      <router-link class="login" tag="span" to="./login" v-if="!state.isLogin">登录</router-link>
+      <!-- <router-link class="login" tag="span" to="./login" v-if="!state.isLogin">登录</router-link>
       <router-link class="login" tag="span" to="./user" v-else>
         <van-icon name="manager-o" />
-      </router-link>
+      </router-link> -->
     </header>
     <nav-bar />
     <!-- <swiper :list="state.swiperList"></swiper> -->
     <div class="good">
-      <header class="good-header">新品上线</header>
+      <!-- <header class="good-header">新品上线</header> -->
       <van-skeleton title :row="3" :loading="state.loading">
         <div class="good-box">
           <div class="good-item" v-for="item in state.newGoodses" :key="item.goodsId" @click="goToDetail(item)">
@@ -33,7 +33,7 @@
       </van-skeleton>
     </div>
     <div class="good">
-      <header class="good-header">热门商品</header>
+      <!-- <header class="good-header">热门商品</header> -->
       <van-skeleton title :row="3" :loading="state.loading">
         <div class="good-box">
           <div class="good-item" v-for="item in state.hots" :key="item.goodsId" @click="goToDetail(item)">
@@ -47,7 +47,7 @@
       </van-skeleton>
     </div>
     <div class="good" :style="{ paddingBottom: '100px'}">
-      <header class="good-header">最新推荐</header>
+      <!-- <header class="good-header">最新推荐</header> -->
       <van-skeleton title :row="3" :loading="state.loading">
         <div class="good-box">
           <div class="good-item" v-for="item in state.recommends" :key="item.goodsId" @click="goToDetail(item)">
@@ -69,7 +69,7 @@ import { useRouter } from 'vue-router'
 import navBar from '@/components/NavBar.vue'
 import { getHome } from '@/service/home'
 import { getLocal,setLocal,getUrlQueryKey } from '@/common/js/utils'
-import { showLoadingToast, closeToast} from 'vant'
+import { showLoadingToast, closeToast, showToast} from 'vant'
 import { useCartStore } from '@/stores/cart'
 const router = useRouter()
 const cart = useCartStore()
@@ -114,6 +114,8 @@ nextTick(() => {
 })
 
 const goToDetail = (item) => {
+  showToast('兑换卷不足')
+  return
   router.push({ path: `/product/${item.goodsId}` })
 }
 
