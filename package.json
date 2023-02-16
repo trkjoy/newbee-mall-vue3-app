@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "vite --force --debug",
-    "build": "cross-env NODE_ENV=production vite build --force --debug",
+    "build": "cross-env NODE_ENV=production vite build --force",
     "preview": "cross-env NODE_ENV=production vite preview",
-    "build:test": "cross-env NODE_ENV=test vite build --mode test --force --sourcemap --debug",
-    "preview:test": "cross-env NODE_ENV=test vite preview --mode test --debug"
+    "build:test": "cross-env NODE_ENV=test vite build --mode test --force --sourcemap",
+    "preview:test": "cross-env NODE_ENV=test vite preview --mode test"
   },
   "dependencies": {
     "axios": "^1.2.6",

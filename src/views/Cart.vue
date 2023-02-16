@@ -50,7 +50,7 @@
     </div>
     <van-submit-bar
       v-if="state.list.length > 0"
-      class="submit-all van-hairline--top"
+      class="submit-all"
       :price="total * 100"
       button-text="结算"
       button-type="primary"
