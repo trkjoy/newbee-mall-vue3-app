@@ -26,7 +26,7 @@
             <img :src="$filters.prefix(item.goodsCoverImg)" alt="">
             <div class="good-desc">
               <div class="title">{{ item.goodsName }}</div>
-              <div class="price"><van-icon class-prefix="my-icon" name="a-daijinquan" size="0.4rem"/> {{ item.sellingPrice }}</div>
+              <div class="price"><van-icon class-prefix="my-icon" name="daijinquan03" size="0.4rem"/> {{ item.sellingPrice }}</div>
             </div>
           </div>
         </div>

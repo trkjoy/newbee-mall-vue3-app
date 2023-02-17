@@ -1,8 +1,8 @@
 @font-face {
   font-family: "my-icon"; /* Project id 3901798 */
-  src: url('iconfont.woff2?t=1676623173895') format('woff2'),
-       url('iconfont.woff?t=1676623173895') format('woff'),
-       url('iconfont.ttf?t=1676623173895') format('truetype');
+  src: url('iconfont.woff2?t=1676626689539') format('woff2'),
+       url('iconfont.woff?t=1676626689539') format('woff'),
+       url('iconfont.ttf?t=1676626689539') format('truetype');
 }
 
 .my-icon {
@@ -12,7 +12,7 @@
   text-rendering: auto;
 }
 
-.my-icon-a-daijinquan:before {
-  content: "\e603";
+.my-icon-daijinquan03:before {
+  content: "\e604";
 }
 
