@@ -1,0 +1,16 @@
+{
+  "id": "3901798",
+  "name": "no name",
+  "font_family": "iconfont",
+  "css_prefix_text": "my-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "34167567",
+      "name": "daijinquan03(1)-copy",
+      "font_class": "a-daijinquan",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    }
+  ]
+}

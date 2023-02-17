@@ -1,5 +1,5 @@
 @import './base.css';
-
+@import './iconfont/iconfont.css';
 #app {
   font-weight: normal;
 }

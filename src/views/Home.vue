@@ -26,7 +26,7 @@
             <img :src="$filters.prefix(item.goodsCoverImg)" alt="">
             <div class="good-desc">
               <div class="title">{{ item.goodsName }}</div>
-              <div class="price"><van-icon name="fire-o" color="#ee0a24" size="0.5rem"/> {{ item.sellingPrice }}</div>
+              <div class="price"><van-icon class-prefix="my-icon" name="a-daijinquan" size="0.4rem"/> {{ item.sellingPrice }}</div>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@ nextTick(() => {
 })
 
 const goToDetail = (item) => {
-  showToast('voucher is not enough!')
+  showToast('voucher is not enough !!!')
   return
   router.push({ path: `/product/${item.goodsId}` })
 }
@@ -236,7 +236,10 @@ const goToDetail = (item) => {
             color: #222333;
           }
           .price {
-            color: @primary;
+            color: #ee0a24;
+            .my-icon{
+              color: #f9b000;
+            }
           }
         }
         &:nth-child(2n + 1) {
