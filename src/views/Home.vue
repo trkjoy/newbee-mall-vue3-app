@@ -25,8 +25,8 @@
           <div class="good-item" v-for="item in state.newGoodses" :key="item.goodsId" @click="goToDetail(item)">
             <img :src="$filters.prefix(item.goodsCoverImg)" alt="">
             <div class="good-desc">
-              <div class="title">{{ item.goodsName }}</div>
               <div class="price"><van-icon class-prefix="my-icon" name="daijinquan03" size="0.4rem"/> {{ item.sellingPrice }}</div>
+              <div class="title">{{ item.goodsName }}</div>
             </div>
           </div>
         </div>
