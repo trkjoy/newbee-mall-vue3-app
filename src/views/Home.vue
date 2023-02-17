@@ -26,7 +26,7 @@
             <img :src="$filters.prefix(item.goodsCoverImg)" alt="">
             <div class="good-desc">
               <div class="title">{{ item.goodsName }}</div>
-              <div class="price">¥ {{ item.sellingPrice }}</div>
+              <div class="price"><van-icon name="fire-o" color="#ee0a24" size="0.5rem"/> {{ item.sellingPrice }}</div>
             </div>
           </div>
         </div>
@@ -91,7 +91,7 @@ onMounted(async () => {
   if (token) {
     state.isLogin = true
     // 获取购物车数据.
-    cart.updateCart()
+    // cart.updateCart()
   }
   showLoadingToast({
     message: 'Loading',
@@ -114,7 +114,7 @@ nextTick(() => {
 })
 
 const goToDetail = (item) => {
-  showToast('兑换卷不足')
+  showToast('voucher is not enough!')
   return
   router.push({ path: `/product/${item.goodsId}` })
 }

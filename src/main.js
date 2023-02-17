@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 import { NoticeBar,ConfigProvider,ActionBar, ActionBarIcon, 
   ActionBarButton, Divider, Popup, Overlay, Loading, Dialog, 
   ContactCard, Form, AddressEdit, AddressList, Field, CellGroup, 
-  Cell, SwipeCell, Icon, Stepper, Card, Checkbox, CheckboxGroup, 
+  Cell, SwipeCell, Image,Icon, Stepper, Card, Checkbox, CheckboxGroup, 
   Button, Swipe, SwipeItem, PullRefresh, List, Tab, Tabs, SubmitBar, 
   Toast, Skeleton,Notify,ImagePreview} from 'vant'
 
@@ -43,6 +43,7 @@ app.use(NoticeBar)
   .use(CellGroup)
   .use(Cell)
   .use(SwipeCell)
+  .use(Image)
   .use(Icon)
   .use(Stepper)
   .use(Card)
