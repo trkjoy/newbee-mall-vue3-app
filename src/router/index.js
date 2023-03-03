@@ -8,6 +8,12 @@ const router = createRouter({
       redirect: '/home'
     },
     {
+      path: '/jump/:token',
+      redirect: to => {
+        return { path: '/home', query: { token: to.params.token } }
+      }
+    },
+    {
       path: '/home',
       name: 'home',
       component: () => import('@/views/Home.vue'),

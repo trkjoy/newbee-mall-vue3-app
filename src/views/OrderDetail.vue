@@ -7,7 +7,6 @@
  * 版权所有，侵权必究！
  *
 -->
-
 <template>
   <div class="order-detail-box">
     <s-header :name="'订单详情'" @callback="close"></s-header>
@@ -25,7 +24,7 @@
         <span>{{ state.detail.createTime }}</span>
       </div>
       <van-button v-if="state.detail.orderStatus == 3" style="margin-bottom: 10px" color="#1baeae" block @click="handleConfirmOrder(state.detail.orderNo)">确认收货</van-button>
-      <van-button v-if="state.detail.orderStatus == 0" style="margin-bottom: 10px" color="#1baeae" block @click="showPayFn">去支付</van-button>
+      <van-button v-if="state.detail.orderStatus == 0" style="margin-bottom: 10px" color="#1baeae" block @click="handlePayOrder(state.detail.orderNo)">去兑换</van-button>
       <van-button v-if="!(state.detail.orderStatus < 0 || state.detail.orderStatus == 4)" block @click="handleCancelOrder(state.detail.orderNo)">取消订单</van-button>
     </div>
     <div class="order-price">
@@ -39,7 +38,7 @@
       </div>
     </div>
     <van-card
-      v-for="item in state.detail.newBeeMallOrderItemVOS"
+      v-for="item in state.detail.orderItems"
       :key="item.goodsId"
       style="background: #fff"
       :num="item.goodsCount"
@@ -48,16 +47,6 @@
       :title="item.goodsName"
       :thumb="$filters.prefix(item.goodsCoverImg)"
     />
-    <van-popup
-      v-model:show="state.showPay"
-      position="bottom"
-      :style="{ height: '24%' }"
-    >
-      <div :style="{ width: '90%', margin: '0 auto', padding: '20px 0' }">
-        <van-button :style="{ marginBottom: '10px' }" color="#1989fa" block @click="handlePayOrder(state.detail.orderNo, 1)">支付宝支付</van-button>
-        <van-button color="#4fc08d" block @click="handlePayOrder(state.detail.orderNo, 2)">微信支付</van-button>
-      </div>
-    </van-popup>
   </div>
 </template>
 
@@ -66,11 +55,11 @@ import { reactive, toRefs, onMounted } from 'vue'
 import sHeader from '@/components/SimpleHeader.vue'
 import { getOrderDetail, cancelOrder, confirmOrder, payOrder } from '@/service/order'
 import { showConfirmDialog, showLoadingToast, closeToast, showSuccessToast, closeDialog } from 'vant'
-import { useRoute } from 'vue-router'
+import { useRoute,useRouter } from 'vue-router'
 const route = useRoute()
+const router = useRouter()
 const state = reactive({
   detail: {},
-  showPay: false
 })
 
 onMounted(() => {
@@ -79,7 +68,7 @@ onMounted(() => {
 
 const init = async () => {
   showLoadingToast({
-    message: '加载中...',
+    message: 'Loading...',
     forbidClick: true
   });
   const { id } = route.query
@@ -93,8 +82,8 @@ const handleCancelOrder = (id) => {
     title: '确认取消订单？',
   }).then(() => {
     cancelOrder(id).then(res => {
-      if (res.resultCode == 200) {
-        showSuccessToast('删除成功')
+      if (res.code == 200) {
+        showSuccessToast(res.msg)
         init()
       }
     })
@@ -105,11 +94,11 @@ const handleCancelOrder = (id) => {
 
 const handleConfirmOrder = (id) => {
   showConfirmDialog({
-    title: '是否确认订单？',
+    title: '是否确认已收货？',
   }).then(() => {
     confirmOrder(id).then(res => {
-      if (res.resultCode == 200) {
-        showSuccessToast('确认成功')
+      if (res.code == 200) {
+        showSuccessToast(res.msg)
         init()
       }
     })
@@ -118,14 +107,19 @@ const handleConfirmOrder = (id) => {
   });
 }
 
-const showPayFn = () => {
-  state.showPay = true
-}
-
-const handlePayOrder = async (id, type) => {
-  await payOrder({ orderNo: id, payType: type })
-  state.showPay = false
-  init()
+const handlePayOrder = async (id) => {
+  showConfirmDialog({
+    title: '是否确认兑换？',
+  }).then(() => {
+    payOrder({ orderNo: id}).then(res => {
+      if (res.code == 200) {
+        showSuccessToast(res.msg)
+        router.push({ path: '/order' })
+      }
+    })
+  }).catch(() => {
+    // on cancel
+  });
 }
 
 const close = () => {

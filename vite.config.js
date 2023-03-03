@@ -1,12 +1,12 @@
+import vue from '@vitejs/plugin-vue'
+// import Components from 'unplugin-vue-components/vite'
+// import { VantResolver } from 'unplugin-vue-components/resolvers'
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import Components from 'unplugin-vue-components/vite'
-import { VantResolver } from 'unplugin-vue-components/resolvers'
-import { wrapperEnv } from './build/utils';
-import { OUTPUT_DIR } from './build/constant';
-import pkg from './package.json';
-import { format } from 'date-fns';
+import { wrapperEnv,createProxy } from './build/utils'
+import { format } from 'date-fns'
+import pkg from './package.json'
+
 const { dependencies, devDependencies, name, version } = pkg;
 const __APP_INFO__ = {
   // APP 后台管理信息
@@ -20,22 +20,20 @@ export default defineConfig(({ command, mode }) => {
     // 根据当前工作目录中的 `mode` 加载 .env 文件
   // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
   const root = process.cwd();
-  const env = loadEnv(mode, root, '');
+  const env = loadEnv(mode, root, 'VITE_');
     // 读取并处理所有环境变量配置文件 .env
   const viteEnv = wrapperEnv(env);
-  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY, VITE_GLOB_PROD_MOCK } =
-    viteEnv;
-
-  const prodMock = VITE_GLOB_PROD_MOCK;
-
-  const isBuild = command === 'build';
-
+  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_PROXY} = viteEnv;
   return {
     base: VITE_PUBLIC_PATH,
     root,
     plugins: [
       vue(),
-      Components({ resolvers: [VantResolver()] })
+      // Components({
+      //   resolvers: [
+      //     VantResolver()
+      //   ] 
+      // })
     ],
     resolve: {
       alias: {
@@ -54,7 +52,6 @@ export default defineConfig(({ command, mode }) => {
       pure: VITE_DROP_CONSOLE ? ['console.log', 'debugger'] : [],
       // minify: true, // minify: true, 等于 minify: 'esbuild',
     },
-    
     build: {
       // 设置最终构建的浏览器兼容目标
       target: 'es2015',
@@ -63,7 +60,7 @@ export default defineConfig(({ command, mode }) => {
       sourcemap: false,
       cssTarget: 'chrome80',
       // 指定输出路径（相对于 项目根目录)
-      outDir: OUTPUT_DIR,
+      outDir: 'dist/'+mode,
       // 只有 minify 为 terser 的时候, 本配置项才能起作用
       // terserOptions: {
       //   compress: {
@@ -77,11 +74,12 @@ export default defineConfig(({ command, mode }) => {
       // 压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能
       reportCompressedSize: true,
       // chunk 大小警告的限制（以 kbs 为单位）
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 20000,
     },
     server: {
-      // host: true,
-      port: env.VITE_PORT,
+      host: true,
+      port: VITE_PORT,
+      proxy: createProxy(VITE_PROXY,['/api','/upload'])
     },
   }
-})
+});

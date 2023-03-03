@@ -11,28 +11,29 @@
 <template>
   <div>
     <header class="home-header wrap" :class="{'active' : state.headerScroll}">
-      <router-link class="login" tag="span" to="./login" v-if="!state.isLogin">登录</router-link>
+      <!-- <router-link class="login" tag="span" to="./login" v-if="!state.isLogin">登录</router-link>
       <router-link class="login" tag="span" to="./user" v-else>
         <van-icon name="manager-o" />
-      </router-link>
+      </router-link> -->
     </header>
     <nav-bar />
+    <!-- <swiper :list="state.swiperList"></swiper> -->
     <div class="good">
-      <header class="good-header">新品上线</header>
+      <!-- <header class="good-header">新品上线</header> -->
       <van-skeleton title :row="3" :loading="state.loading">
         <div class="good-box">
           <div class="good-item" v-for="item in state.newGoodses" :key="item.goodsId" @click="goToDetail(item)">
             <img :src="$filters.prefix(item.goodsCoverImg)" alt="">
             <div class="good-desc">
+              <div class="price"><van-icon class-prefix="my-icon" name="daijinquan03" size="0.4rem"/> {{ item.sellingPrice }}</div>
               <div class="title">{{ item.goodsName }}</div>
-              <div class="price">¥ {{ item.sellingPrice }}</div>
             </div>
           </div>
         </div>
       </van-skeleton>
     </div>
     <div class="good">
-      <header class="good-header">热门商品</header>
+      <!-- <header class="good-header">热门商品</header> -->
       <van-skeleton title :row="3" :loading="state.loading">
         <div class="good-box">
           <div class="good-item" v-for="item in state.hots" :key="item.goodsId" @click="goToDetail(item)">
@@ -46,7 +47,7 @@
       </van-skeleton>
     </div>
     <div class="good" :style="{ paddingBottom: '100px'}">
-      <header class="good-header">最新推荐</header>
+      <!-- <header class="good-header">最新推荐</header> -->
       <van-skeleton title :row="3" :loading="state.loading">
         <div class="good-box">
           <div class="good-item" v-for="item in state.recommends" :key="item.goodsId" @click="goToDetail(item)">
@@ -67,11 +68,11 @@ import { reactive, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import navBar from '@/components/NavBar.vue'
 import { getHome } from '@/service/home'
-import { getLocal } from '@/common/js/utils'
-import { showLoadingToast, closeToast, showToast } from 'vant'
+import { getLocal,setLocal,getUrlQueryKey } from '@/common/js/utils'
+import { showLoadingToast, closeToast, showToast} from 'vant'
 import { useCartStore } from '@/stores/cart'
-const cart = useCartStore()
 const router = useRouter()
+const cart = useCartStore()
 const state = reactive({
   swiperList: [], // 轮播图列表
   isLogin: false, // 是否已登录
@@ -82,19 +83,24 @@ const state = reactive({
   loading: true
 })
 onMounted(async () => {
-  const token = getLocal('token')
+  let token = getUrlQueryKey("token")
+  if(token){
+    setLocal('token',token)
+  }
+  token = getLocal('token')
   if (token) {
     state.isLogin = true
     // 获取购物车数据.
-    cart.updateCart()
+    // cart.updateCart()
   }
   showLoadingToast({
-    message: '加载中...',
+    message: 'Loading',
     forbidClick: true
   });
   const { data } = await getHome()
-  state.newGoodses = data.newGoodses
   state.hots = data.hotGoodses
+  // state.swiperList = data.carousels
+  state.newGoodses = data.newGoodses
   state.recommends = data.recommendGoodses
   state.loading = false
   closeToast()
@@ -108,12 +114,11 @@ nextTick(() => {
 })
 
 const goToDetail = (item) => {
+  showToast('voucher is not enough !!!')
+  return
   router.push({ path: `/product/${item.goodsId}` })
 }
 
-const tips = () => {
-  showToast('敬请期待');
-}
 </script>
 
 <style lang="less" scoped >
@@ -231,7 +236,10 @@ const tips = () => {
             color: #222333;
           }
           .price {
-            color: @primary;
+            color: #ee0a24;
+            .my-icon{
+              color: #f9b000;
+            }
           }
         }
         &:nth-child(2n + 1) {

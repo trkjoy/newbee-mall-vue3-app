@@ -17,8 +17,12 @@
   }
 }
 
+export function getUrlQueryKey(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
+}
+
 export const getLocal = (name) => {
-  return localStorage.getItem(name)
+  return "Bearer "+ localStorage.getItem(name)
 }
 
 export const setLocal = (name, value) => {
@@ -4308,7 +4312,7 @@ export const prefix = (url) => {
   if (url && url.startsWith('http')) {
     return url
   } else {
-    url = `http://backend-api-01.newbee.ltd${url}`
+    url = `https://down.slots12345.com${url}`
     return url
   }
 }

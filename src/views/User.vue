@@ -14,7 +14,7 @@
     <van-skeleton title :avatar="true" :row="3" :loading="state.loading">
       <div class="user-info">
         <div class="info">
-          <img src="https://s.yezgea02.com/1604040746310/aaaddd.png"/>
+          <img src="../assets/photo.png"/>
           <div class="user-desc">
             <span>昵称：{{ state.user.nickName }}</span>
             <span>登录名：{{ state.user.loginName }}</span>
@@ -36,10 +36,10 @@
         <span>地址管理</span>
         <van-icon name="arrow" />
       </li>
-      <li @click="goTo('/about')">
+      <!-- <li @click="goTo('/about')">
         <span>关于我们</span>
         <van-icon name="arrow" />
-      </li>
+      </li> -->
     </ul>
     <nav-bar></nav-bar>
   </div>

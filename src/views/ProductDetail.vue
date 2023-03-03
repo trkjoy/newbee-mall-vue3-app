@@ -14,7 +14,7 @@
     <div class="detail-content">
       <div class="detail-swipe-wrap">
         <van-swipe class="my-swipe" indicator-color="#1baeae">
-          <van-swipe-item v-for="(item, index) in state.detail.goodsCarouselList" :key="index">
+          <van-swipe-item v-for="(item, index) in state.detail.goodsCarousel" :key="index">
             <img :src="item" alt="">
           </van-swipe-item>
         </van-swipe>
@@ -41,7 +41,7 @@
     </div>
     <van-action-bar>
       <van-action-bar-icon icon="chat-o" text="客服" />
-      <van-action-bar-icon icon="cart-o" :badge="!cart.count ? '' : cart.count" @click="goTo()" text="购物车" />
+      <van-action-bar-icon icon="cart-o" :badge="(!cart.count ? '' : cart.count)" @click="goTo()" text="购物车"/>
       <van-action-bar-button type="warning" @click="handleAddCart" text="加入购物车" />
       <van-action-bar-button type="danger" @click="goToCart" text="立即购买" />
     </van-action-bar>
@@ -63,14 +63,14 @@ const cart = useCartStore()
 
 const state = reactive({
   detail: {
-    goodsCarouselList: []
+    goodsCarousel: []
   }
 })
 
 onMounted(async () => {
   const { id } = route.params
   const { data } = await getDetail(id)
-  data.goodsCarouselList = data.goodsCarouselList.map(i => prefix(i))
+  data.goodsCarousel = data.goodsCarousel.map(i => prefix(i))
   state.detail = data
   cart.updateCart()
 })
@@ -90,8 +90,8 @@ const goTo = () => {
 }
 
 const handleAddCart = async () => {
-  const { resultCode } = await addCart({ goodsCount: 1, goodsId: state.detail.goodsId })
-  if (resultCode == 200 ) showSuccessToast('添加成功')
+  const { code,msg } = await addCart({ goodsCount: 1, goodsId: state.detail.goodsId })
+  if (code == 200 ) showSuccessToast(msg)
   cart.updateCart()
 }
 

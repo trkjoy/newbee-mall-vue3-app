@@ -1,0 +1,18 @@
+@font-face {
+  font-family: "my-icon"; /* Project id 3901798 */
+  src: url('iconfont.woff2?t=1676626689539') format('woff2'),
+       url('iconfont.woff?t=1676626689539') format('woff'),
+       url('iconfont.ttf?t=1676626689539') format('truetype');
+}
+
+.my-icon {
+  font-family: "my-icon" !important;
+  -webkit-font-smoothing: antialiased;
+  font: 0.37333rem/1 "my-icon";
+  text-rendering: auto;
+}
+
+.my-icon-daijinquan03:before {
+  content: "\e604";
+}
+

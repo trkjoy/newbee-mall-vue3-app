@@ -10,7 +10,7 @@
 import axios from '../utils/axios'
 
 export function getDetail(id) {
-  return axios.get(`/goods/detail/${id}`);
+  return axios.post(`/api/goods/detail/${id}`);
 }
 
 export function getCategory() {

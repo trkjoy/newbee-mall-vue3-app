@@ -1,19 +1,31 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { ConfigProvider,ActionBar, ActionBarIcon, ActionBarButton, Divider, Popup, Overlay, Loading, Dialog, ContactCard, Form, AddressEdit, AddressList, Field, CellGroup, Cell, SwipeCell, Icon, Stepper, Card, Checkbox, CheckboxGroup, Button, Swipe, SwipeItem, PullRefresh, List, Tab, Tabs, SubmitBar, Toast, Skeleton } from 'vant'
+import { NoticeBar,ConfigProvider,ActionBar, ActionBarIcon, 
+  ActionBarButton, Divider, Popup, Overlay, Loading, Dialog, 
+  ContactCard, Form, AddressEdit, AddressList, Field, CellGroup, 
+  Cell, SwipeCell, Image,Icon, Stepper, Card, Checkbox, CheckboxGroup, 
+  Button, Swipe, SwipeItem, PullRefresh, List, Tab, Tabs, SubmitBar, 
+  Toast, Skeleton,Notify,ImagePreview} from 'vant'
 
 import App from './App.vue'
 import router from './router'
 import 'lib-flexible/flexible'
-
 import './assets/main.css'
 import './common/style/theme.css'
+
+import 'vant/lib/index.css'
+import 'vant/es/dialog/style'
 import 'vant/es/toast/style'
+import 'vant/es/notify/style'
+import 'vant/es/image-preview/style'
+
+
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(ConfigProvider)
+app.use(NoticeBar)
+  .use(ConfigProvider)
   .use(ActionBarButton)
   .use(ActionBarIcon)
   .use(ActionBar)
@@ -31,6 +43,7 @@ app.use(ConfigProvider)
   .use(CellGroup)
   .use(Cell)
   .use(SwipeCell)
+  .use(Image)
   .use(Icon)
   .use(Stepper)
   .use(Card)
@@ -45,14 +58,15 @@ app.use(ConfigProvider)
   .use(Checkbox)
   .use(CheckboxGroup)
   .use(Skeleton)
-
+  .use(Notify)
+  .use(ImagePreview)
 // 全局过滤器
 app.config.globalProperties.$filters = {
   prefix(url) {
     if (url && url.startsWith('http')) {
       return url
     } else {
-      url = `http://backend-api-01.newbee.ltd${url}`
+      url = `https://down.slots12345.com${url}`
       return url
     }
   }
